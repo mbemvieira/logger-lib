@@ -12,6 +12,11 @@ export enum LogType {
     ERROR = 'error',
 };
 
-export type Options = {
-    type: OutputType
+export type ConsoleOptions = {
 };
+
+export type FileOptions = {
+    path: string,
+};
+
+export type Options = ConsoleOptions | FileOptions;

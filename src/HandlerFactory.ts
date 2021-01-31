@@ -1,14 +1,19 @@
+import { ConsoleHandler } from './handlers/ConsoleHandler';
+import { FileHandler } from './handlers/FileHandler';
 import { OutputContract } from "./contracts/OutputContract";
-import { handlerMap } from "./handlers";
-import { HandlersMap } from "./types/handlers";
-import { OutputType } from "./types/options";
+import { HandlersList } from "./types/handlers";
+import { Options, OutputType } from "./types/options";
 
 export class HandlerFactory {
-    private static handlers: HandlersMap = {};
+    private static handlers: HandlersList = {};
+    private static handlersMap: Record<OutputType, any> = {
+        [OutputType.CONSOLE]: ConsoleHandler,
+        [OutputType.FILE]: FileHandler,
+    };
 
-    public static getInstance(type: OutputType): OutputContract {
+    public static getInstance(type: OutputType, options: Options): OutputContract {
         if (HandlerFactory.handlers[type] == null) {
-            HandlerFactory.handlers[type] = new handlerMap[type]();
+            HandlerFactory.handlers[type] = new HandlerFactory.handlersMap[type](options);
         }
 
         return <OutputContract> HandlerFactory.handlers[type];
